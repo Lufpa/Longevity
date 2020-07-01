@@ -9,3 +9,6 @@ CMH.array.sh: This is the master script that allows paralelization of the downsa
 CMH.pipeline.sh: This script calls the script that does the downsampling, and uses its ouput to run the CMH test in PoPoolation2
 
 CMH.downsampling.prob.R: This is the script that does the downsampling per SNP per sample and generates a) one file per round in case is needed to follow up individual rounds of downsampling, and b) a file with the average allele count per SNP per sample after X number of downsampling rounds, and this is the file used to run the CMH test.
+
+
+*The CMH.SNPOverlapTables.R is just some sample code that I used to generate the two randomized a_T0 samples, and to combine all the replicate cages. This code is not necessary to replicate the analysis. 
