@@ -1,0 +1,11 @@
+All input files for the CMH test using real and simulated data are found in the "Permutations_indir" folder.
+
+The file that feeds all information to the CMH pipeline is "listfiles" (also found in the "Permutations_indir" folder).
+
+The pipeline uses three scripts:
+
+CMH.array.sh: This is the master script that allows paralelization of the downsampling rounds if the SNP files are split in subsets
+
+CMH.pipeline.sh: This script calls the script that does the downsampling, and uses its ouput to run the CMH test in PoPoolation2
+
+CMH.downsampling.prob.R: This is the script that does the downsampling per SNP per sample and generates a) one file per round in case is needed to follow up individual rounds of downsampling, and b) a file with the average allele count per SNP per sample after X number of downsampling rounds, and this is the file used to run the CMH test.
