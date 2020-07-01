@@ -1,0 +1,10 @@
+cmh_hs_ref_sim0.txt	cmh_hs_alt_sim0.txt	HS	sim0	2reps	1
+cmh_ctrl_ref_sim0.txt	cmh_ctrl_alt_sim0.txt	CTRL	sim0	2reps	1
+cmh_hs_ref_sim025.txt	cmh_hs_alt_sim025.txt	HS	sim025	2reps	1
+cmh_ctrl_ref_sim025.txt	cmh_ctrl_alt_sim025.txt	CTRL	sim025	2reps	1
+cmh_hs_ref_sim05.txt	cmh_hs_alt_sim05.txt	HS	sim05	2reps	1
+cmh_ctrl_ref_sim05.txt	cmh_ctrl_alt_sim05.txt	CTRL	sim05	2reps	1
+cmh_hs_ref_sim075.txt	cmh_hs_alt_sim075.txt	HS	sim075	2reps	1
+cmh_ctrl_ref_sim075.txt	cmh_ctrl_alt_sim075.txt	CTRL	sim075	2reps	1
+cmh_hs_ref_sim1.txt	cmh_hs_alt_sim1.txt	HS	sim1	2reps	1
+cmh_ctrl_ref_sim1.txt	cmh_ctrl_alt_sim1.txt	CTRL	sim1	2reps	1
