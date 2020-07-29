@@ -3,3 +3,4 @@ Code for several analysis of the longevity project
 1) CMH test downsampling data to one read per individual
 2) RNAseq analysis
 3) Overlap with other longevity studies
+4) GO enrichment analysis for SNP results
