@@ -1,0 +1,9 @@
+GO enrichment analysis for the longevity-related SNPs
+We use Gowinda (Kofler & Schlötterer, 2012) which accounts for biases in SNP-to-gene mapping due to gene length. 
+
+It currently runs in parallel for x number of files containing SNPs for which GO enrichment will be calculated
+In this particular case, we analyzed 4 files:
+1 = shared SNPs
+2 = control only SNPs
+3 = hs only SNPs
+4 = all SNPs
