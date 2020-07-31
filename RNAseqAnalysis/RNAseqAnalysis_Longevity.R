@@ -162,7 +162,7 @@ library("gridExtra")
 ###
 ### OVERLAP WITH AGE-RELATED SNP EFFECTS
 ###
-  
+ 
 #Load gene-level results from Allele Frequency Changes analysis
 #The overlap between significant SNPs and genes was done by extending gene body +-1kb to include regulatory regions
   afc <- read.table("Results_AFC_genelevel.txt",h=T)
@@ -171,18 +171,17 @@ library("gridExtra")
   dge <- read.table("Results_RNAseqAge_longevity.txt",h=T)
   dge$gene <- rownames(dge)
 
-#Overlap between DGE and AFC genes
+#Overlap between DGE and AFC genes (1034 genes)
   length(intersect(afc$gene[afc$sig==1], dge$gene[dge$diffexp_in!="none"]))
   l<- list(as.character(afc$gene[afc$sig==1]), as.character(dge$gene[dge$diffexp_in!="none"]))
   VennDiagram::venn.diagram(x=l,category.names = c("AFC","DEG"), print.mode = c("raw","percent"), filename = "Venn.AFC.DEG.png",fill=c("salmon","orange"))
 
-#Significant AFC genes are enriched for DE genes (pval 3.5e-7, odds ratio 1.3)
+#Significant AFC genes are enriched for DE genes (pval 4.4e-11, odds ratio 1.4)
   a = length(intersect(afc$gene[afc$sig==1], dge$gene[dge$diffexp_in!="none"])) #Number of significant AFC genes that are DE genes
   b = sum(afc$sig==1) - a #Number of significant AFC genes that are not DE genes
   c = length(intersect(afc$gene[afc$sig==0], dge$gene[dge$diffexp_in!="none"]))#Number of non significant AFC genes that are DE genes
   d = sum(afc$sig==0) - c #Number of non significant AFC that are not DE genes
   fisher.test(matrix(c(a,b,c,d), nrow = 2))
-  
   
 #Overlap between AFC genes and large effect size DGE (lfc>1)
   length(intersect(afc$gene[afc$sig==1], dge$gene[dge$diffexp_in!="none" & dge$lfc_1=="yes"]))
@@ -196,16 +195,17 @@ library("gridExtra")
   c = length(intersect(afc$gene[afc$sig==0], dge$gene[dge$diffexp_in!="none" & dge$lfc_1=="yes"])) #Number of non significant AFC genes that are lfc>1 DE genes
   d = length(intersect(afc$gene[afc$sig==0], dge$gene[dge$diffexp_in!="none" & dge$lfc_1=="no"]))  #Number of non significant AFC that are lfc<1 DE genes
   fisher.test(matrix(c(a,b,c,d), nrow = 2))    
-  
 
-#34% of the overlap between AFC and DE genes have effects in the same group (both diets, hs only, ctrl only) 
+  
+  #38% of the overlap between AFC and DE genes have effects in the same group (both diets, hs only, ctrl only) 
   afc_dge <- merge(afc[afc$sig==1,], dge[dge$diffexp_in!="none",], by="gene")
-  afc_dge$overlap<- apply(afc_dge, 1, function(x) if(x[13]=="ctrl" && x[4]==1 | 
-                                                     x[13]=="hs"   && x[3]==1 |
-                                                     x[13]=="both" && x[2]==1 ) {
+  afc_dge$overlap<- apply(afc_dge, 1, function(x) if(x[15]=="ctrl" && x[4]==1 | 
+                                                     x[15]=="hs"   && x[3]==1 |
+                                                     x[15]=="both" && x[2]==1 ) {
     "samegroup" } else { "diffgroup" })
   table(afc_dge$overlap) 
- 
+
+
    
 #Non exonic Age-related SNPs are not enriched for Differentially Expressed genes compared to exonic SNPs
   #using genes that are tagged by just one type of SNP (either exonic or not)
@@ -231,4 +231,117 @@ library("gridExtra")
   
 
   
+###
+### GO enrichment for the genes that overlap AFC and DEG but are significant in the same group (either both or GxE)
+### 
   
+  #Load gene-level results from Allele Frequency Changes analysis
+  #The overlap between significant SNPs and genes was done by extending gene body +-1kb to include regulatory regions
+  afc <- read.table("Results_AFC_genelevel.txt",h=T)
+  
+  #Load Differential Expression results
+  dge <- read.table("Results_RNAseqAge_longevity.txt",h=T)
+  dge$gene <- rownames(dge)
+  
+  
+  #Gene set that is sig in AFC and DGE in both conditions ("shared genes") (n=283 genes)
+  shared_DEG <- intersect(afc$gene[afc$both==1], dge$gene[dge$diffexp_in=="both"])
+      
+  #Gene set that is sig in AFC and DGE in only one condition ("GxE genes") (n=283 genes)
+  # 288 genes, 157 unique (not common with shared)
+  tmp.c <- intersect(afc$gene[afc$ctrl==1], dge$gene[dge$diffexp_in=="ctrl"])
+  tmp.hs <- intersect(afc$gene[afc$hs==1], dge$gene[dge$diffexp_in=="hs"])
+  gxe_DEG <- c(tmp.c, tmp.hs)
+      
+  # GO enrichment will be tested against the total number of genes used in the DEG analysis = 10915
+  allgenesdeg <- dge$gene
+  
+  
+  # Getting file ready for GO enrichment anlysis
+  
+  library("AnnotationDbi")
+  library("org.Dm.eg.db")
+  
+  # Convert Flybase geneID to Entrez 
+      length(shared_DEG)<-length(allgenesdeg)
+      length(gxe_DEG)<-length(allgenesdeg)
+      forGO <- as.data.frame(cbind(shared_DEG, gxe_DEG, allgenesdeg))
+    
+      shared_entrez <- (mapIds(org.Dm.eg.db, 
+                              keys=as.character(forGO$shared_DEG), 
+                              column="ENTREZID", 
+                              keytype="ENSEMBL",
+                              multiVals="first"))
+      shared_entrez <- unlist(shared_entrez)
+      length(shared_entrez) <- nrow(forGO)
+      
+      gxe_entrez <- mapIds(org.Dm.eg.db, 
+                              keys=as.character(forGO$gxe_DEG), 
+                              column="ENTREZID", 
+                              keytype="ENSEMBL",
+                              multiVals="first")
+      gxe_entrez <- unlist(gxe_entrez)
+      length(gxe_entrez) <- nrow(forGO)
+      
+      all_entrez <- mapIds(org.Dm.eg.db, 
+                                 keys=as.character(forGO$allgenesdeg), 
+                                 column="ENTREZID", 
+                                 keytype="ENSEMBL",
+                                 multiVals="first")
+      all_entrez<- unlist(all_entrez)
+      length(all_entrez) <- nrow(forGO)
+      
+      forGO <- as.data.frame(cbind(forGO, shared_entrez, gxe_entrez,all_entrez))
+      
+      write.table(forGO, "Data_for_GOenrichment.txt", sep="\t", col.names = T, row.names = F, quote=F)
+  
+  #Download and save GO biological process gene sets for D.melanogaster
+  #This is the frozen version of the datafile downloaded on July 30th, 2020 (use this file if analysis need to be replicated, the 
+  #online version might have been updated in the meantime)
+      
+      flyGO <- xRDataLoader(RData.customised = 'org.Dm.egGOBP', RData.location = "https://github.com/hfang-bristol/RDataCentre/blob/master/dnet/1.0.7")
+      saveRDS(flyGO, "org.Dm.egGOBP.july30.2020")
+      
+      
+      
+  #run GO ananlysis with XGR
+      
+      library(XGR)
+      readRDS("org.Dm.egGOBP.july30.2020")
+      forGO <- read.table("Data_for_GOenrichment.txt",h=T)
+      
+      go_shared <- xEnricherGenes(data = as.character(forGO$shared_entrez), 
+                                        ontology.customised = flyGO,
+                                        ontology = 'NA',
+                                        background = as.character(forGO$all_entrez),
+                                        verbose = TRUE,
+                                        check.symbol.identity = TRUE,
+                                        ontology.algorithm = "none")
+      
+      
+      go_gxe <- xEnricherGenes(data = as.character(forGO$gxe_entrez), 
+                                       ontology.customised = flyGO,
+                                       ontology = 'NA',
+                                       background = as.character(forGO$all_entrez),
+                                       verbose = TRUE,
+                                       check.symbol.identity = TRUE,
+                                       ontology.algorithm = "none")
+      
+    #write GO results (gene IDs are EntrezIDs)
+      tmp <- xEnrichViewer(go_shared, top_num = 35, sortBy = "adjp", details=T)
+      sharedresutls <- data.frame(term=rownames(tmp), tmp)
+      write.table(sharedresutls, "GOresults_sharedGenes.txt" ,sep="\t", row.names=F, col.names = T, quote=F)
+      
+      tmp <- xEnrichViewer(go_gxe, top_num = 10, sortBy = "adjp", details=T)
+      geresutls <- data.frame(term=rownames(tmp), tmp)
+      write.table(geresutls, "GOresults_gxeGenes.txt" ,sep="\t", row.names=F, col.names = T, quote=F)
+      
+    #### Plot GO results comparing gxe and shared 
+    ####
+      
+      l<- list(go_shared, go_gxe); names(l) <- c("Shared Genes", "GxE Genes")
+         goplot <- xEnrichCompare(l, displayBy="fc", FDR.cutoff = 0.05, wrap.width = 45) + 
+                    scale_fill_brewer(palette='Set2') +
+                    ggtitle('GO Enrichment Biological Process (FDR < 0.05)')
+         goplot
+   
