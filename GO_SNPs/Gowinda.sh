@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --mem=40000
+#SBATCH --mem=3000
 #SBATCH --time=1:00:00 --qos=1hr
 #SBATCH --job-name=GOl_gene
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=4
 #SBATCH --output="%A_%a.out"
 #SBATCH --error="%A_%a.error"
-#SBATCH --array=1-4  #if running this for the 4 groups (shared SNPs, ctrl only, hs only, all) set 1-4
+#SBATCH --array=1,4  #if running this for the 4 groups (shared SNPs, ctrl only, hs only, all) set 1-4
 
 #Requires:
 	# --snp-file: file with all SNPs used in the analysis, chromosome should not contain "chr"
@@ -26,7 +26,7 @@ date
 #### Calculate enrichment assuming all SNPs in a gene are haplogroup + extends the gene 1kb up and downstream 
 #### This option fixes the number of genes to resample, and therefore the number of SNPs per permutation might vary
 
-        java -Xmx4g -jar ~/bin/Gowinda-1.12.jar --snp-file TotalSNPs.txt --candidate-snp-file CandidateSNPs.${SLURM_ARRAY_TASK_ID} --gene-set-file funcassociate_go_associations.txt --annotation-file dmel-all-r6.23.gtf --simulations 100000 --min-significance 1 --gene-definition updownstream1000 --threads 8 --output-file results_${SLURM_ARRAY_TASK_ID}_gene_updown1k.txt --mode gene --min-genes 3
+        java -Xmx4g -jar ~/bin/Gowinda-1.12.jar --snp-file TotalSNPs.txt --candidate-snp-file CandidateSNPs.${SLURM_ARRAY_TASK_ID} --gene-set-file funcassociate_go_associations.txt --annotation-file ~/genomes/dmel_genome/dmel-all-r6.23.gtf --simulations 100000 --min-significance 1 --gene-definition updownstream1000 --threads 4 --output-file results_${SLURM_ARRAY_TASK_ID}_gene_updown1k.txt --mode gene --min-genes 3
 
 
 echo 'done!'
