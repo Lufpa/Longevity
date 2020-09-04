@@ -42,7 +42,7 @@ if (args[6] == "2reps") {
   perm_ref_at02 <- as.data.frame(matrix(ncol=perm, nrow = nrow(file)))
   perm_alt_at02 <- as.data.frame(matrix(ncol=perm, nrow = nrow(file)))
   
-  ind <- read.table(paste(args[7],"/indpercage/","indpercage_",args[4],"_", args[5],".txt",sep=""), h=T, row.names=1)
+  ind <- read.table(paste(args[7],"indpercage_",args[4],"_", args[5],".txt",sep=""), h=T, row.names=1)
   
   for (p in 1:perm){
     print(c("permutation number ", p))
