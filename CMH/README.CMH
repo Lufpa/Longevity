@@ -1,6 +1,7 @@
 All input files for the CMH test using real and simulated data are found in the "Permutations_indir" folder.
 
 The file that feeds all information to the CMH pipeline is "listfiles" (also found in the "Permutations_indir" folder).
+The file that defines the number of samples per cage is "indpercage" (in "Permutations_indir")
 
 The pipeline uses three scripts:
 

@@ -14,12 +14,12 @@
 ## a1 a2 at01 at02 dt0 d1
 
 ## Requires: a tab delimited file with the column # of the first and last fly for each cage in the alt/ref tables
-## The rows must correspond to the order of the actual alt and ref tables. e.g:
+## The rownames must correspond to the order of the actual alt and ref tables. e.g:
 ## a1	1	500
 ## a2	501	1000
 ## t01	1001	1500
 ## t02	1501	200
-## filename should be "indpercage_arg[3]_arg[4].txt - arg3-4 are col3-4 from the listtables table
+## filename should be "indpercage_arg[3]_arg[4].txt" - arg3-4 are col3-4 from the listtables table
 
 ## This code downsamples read counts to 1 read count per individual per SNP to control for differential coverage per individual sample. 
 ## The downsampling is done 1000 times to get an good average estimate of the real ref/alt counts per SNP
