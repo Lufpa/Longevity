@@ -7,13 +7,14 @@
 #SBATCH --error="%A_%a.error"
 #SBATCH --array=1-10 #adjust according to the nrow of the "listtables" file
 
-## Requires: listtables tab separated file with 5 columns: altfile reffile treatment chr replicates(2reps,3reps)
+## Requires: listtables tab separated file with 5 columns: altfile reffile treatment chr replicates(2reps,3reps). 
+## The file must be located in inDIR
 
-## Requires: alt and ref tables with SNPs that overlap all cages.
+## Requires: alt and ref tables with SNPs that overlap all cages (must be in inDIR)
 ## The tables HAVE to be organized in the following order:
-## a1 a2 at01 at02 dt0 d1
+## Tend1 Tend2 T01 T02 T03 Tend3
 
-## Requires: a tab delimited file (header and rownames) with the column # of the first and last fly for each cage in the alt/ref tables
+## Requires: a tab delimited file (header and rownames) with the column # of the first and last fly for each cage in the alt/ref tables (must be in inDIR)
 ## The rownames must correspond to the order of the actual alt and ref tables. e.g:
 ###	firstfly	lastfly
 ## a1	1	500
