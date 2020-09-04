@@ -1,0 +1,7 @@
+firstflyC	lastflyC
+cage_a_c1_ref	1	370
+cage_a_c2_ref	371	821
+cage_a_T0_ref1	822	1355
+cage_a_T0_ref2	1356	1881
+cage_d_T0_ref	1882	2844
+cage_d_c1_ref	2845	3370
