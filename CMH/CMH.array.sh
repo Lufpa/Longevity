@@ -13,8 +13,9 @@
 ## The tables HAVE to be organized in the following order:
 ## a1 a2 at01 at02 dt0 d1
 
-## Requires: a tab delimited file with the column # of the first and last fly for each cage in the alt/ref tables
+## Requires: a tab delimited file (header and rownames) with the column # of the first and last fly for each cage in the alt/ref tables
 ## The rownames must correspond to the order of the actual alt and ref tables. e.g:
+###	firstfly	lastfly
 ## a1	1	500
 ## a2	501	1000
 ## t01	1001	1500
